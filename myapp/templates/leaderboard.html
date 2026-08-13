@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card">
+
+    <h1>🏆 Leaderboard</h1>
+
+    <table class="leaderboard-table">
+
+        <tr>
+            <th>Rank</th>
+            <th>Username</th>
+            <th>Score</th>
+            <th>Total</th>
+            <th>Percentage</th>
+        </tr>
+
+        {% for result in results %}
+
+        <tr>
+
+            <td>
+                {% if forloop.counter == 1 %}
+                    🥇
+                {% elif forloop.counter == 2 %}
+                    🥈
+                {% elif forloop.counter == 3 %}
+                    🥉
+                {% else %}
+                    {{ forloop.counter }}
+                {% endif %}
+            </td>
+
+            <td>{{ result.user.username }}</td>
+
+            <td>{{ result.score }}</td>
+
+            <td>{{ result.total }}</td>
+
+            <td>
+                {% widthratio result.score result.total 100 %}%
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="5">
+                No Results Available
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+{% endblock %}

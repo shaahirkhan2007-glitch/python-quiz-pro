@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Python Quiz Pro</title>
+
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<nav class="navbar">
+
+    <div class="logo">
+        <span>Python</span> Quiz Pro
+    </div>
+
+    <ul>
+
+        <li><a href="/">Home</a></li>
+
+        {% if user.is_authenticated %}
+
+        <li><a href="/quiz/">Quiz</a></li>
+
+        <li><a href="/dashboard/">Dashboard</a></li>
+
+        <li><a href="/leaderboard/">Leaderboard</a></li>
+
+        <li><a href="/logout/">Logout</a></li>
+
+        {% else %}
+
+        <li><a href="/login/">Login</a></li>
+
+        <li><a href="/register/">Register</a></li>
+
+        {% endif %}
+
+    </ul>
+
+</nav>
+
+<div class="page">
+
+{% block content %}
+
+{% endblock %}
+
+</div>
+
+</body>
+
+</html>

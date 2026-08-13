@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card" style="max-width:600px;margin:60px auto;">
+
+    <h1 style="text-align:center;font-size:42px;">
+        Create Your Account 🚀
+    </h1>
+
+    <p style="text-align:center;color:#cbd5e1;margin-bottom:35px;">
+        Join Python Quiz Pro and start learning today.
+    </p>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <br>
+
+        <button type="submit" style="width:100%;">
+            Create Account
+        </button>
+
+    </form>
+
+    <br>
+
+    <div style="text-align:center;">
+
+        <p style="color:#94a3b8;">
+            Already have an account?
+        </p>
+
+        <a href="/login/" class="btn">
+            Login
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

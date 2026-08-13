@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 style="text-align:center;margin-bottom:40px;">
+📊 Dashboard
+</h1>
+
+<div class="dashboard-grid">
+
+    <div class="dashboard-card">
+        <h2>📝 Total Attempts</h2>
+        <h1>{{ results|length }}</h1>
+    </div>
+
+    <div class="dashboard-card">
+        <h2>🏆 Highest Score</h2>
+        <h1>
+            {% if results %}
+                {{ results.0.score }}
+            {% else %}
+                0
+            {% endif %}
+        </h1>
+    </div>
+
+    <div class="dashboard-card">
+        <h2>👤 Welcome</h2>
+        <h1>{{ request.user.username }}</h1>
+    </div>
+
+</div>
+
+<div class="card" style="margin-top:40px;">
+
+<h2 style="margin-bottom:20px;">
+Recent Quiz Results
+</h2>
+
+<table class="result-table">
+
+<tr>
+
+<th>#</th>
+<th>Score</th>
+<th>Total</th>
+
+</tr>
+
+{% for result in results %}
+
+<tr>
+
+<td>{{ forloop.counter }}</td>
+
+<td>{{ result.score }}</td>
+
+<td>{{ result.total }}</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+
+<td colspan="3">
+
+No quiz attempts yet.
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+{% endblock %}

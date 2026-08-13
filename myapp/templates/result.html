@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="result-card">
+
+    <div class="score-circle">
+        {{ score }}/{{ total }}
+    </div>
+
+    <h1>Quiz Completed 🎉</h1>
+
+    {% if score >= total|floatformat:0 %}
+        <h2 class="excellent">🏆 Perfect Score!</h2>
+
+    {% elif score >= total|divisibleby:2 %}
+        <h2 class="good">🎉 Good Job!</h2>
+
+    {% else %}
+        <h2 class="try">📚 Keep Practicing!</h2>
+    {% endif %}
+
+    <p class="score-text">
+        You answered <b>{{ score }}</b> out of
+        <b>{{ total }}</b> questions correctly.
+    </p>
+
+    <div class="buttons">
+
+        <a href="/" class="btn">
+            🏠 Home
+        </a>
+
+        <a href="/quiz/" class="btn">
+            🔄 Try Again
+        </a>
+
+        <a href="/leaderboard/" class="btn">
+            🏆 Leaderboard
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}
