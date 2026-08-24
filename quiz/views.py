@@ -1,92 +1,145 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
+
 from .forms import RegisterForm
 from .models import Question, Result
+
 import random
 
 
-# ---------------- HOME ----------------
+# ==================================================
+# HOME
+# ==================================================
 
 def home(request):
     return render(request, "home.html")
 
 
-# ---------------- QUIZ ----------------
+# ==================================================
+# QUIZ
+# ==================================================
 
 @login_required
 def quiz(request):
 
-    # Get all question IDs
-    all_ids = list(Question.objects.values_list("id", flat=True))
+    # ----------------------------------------------
+    # CREATE A NEW QUIZ SESSION
+    # ----------------------------------------------
 
-    if len(all_ids) == 0:
-        return render(request, "quiz.html", {
-            "message": "No questions found. Please add questions in Admin."
-        })
-
-    # Use only the first 10 random questions
     if "questions" not in request.session:
 
-        random.shuffle(all_ids)
+        question_ids = list(
+            Question.objects.values_list("id", flat=True)
+        )
 
-        request.session["questions"] = all_ids[:10]
+        # Need at least 10 questions
+        if len(question_ids) < 10:
+            return render(request, "quiz.html", {
+                "message": "Please add at least 10 questions in Admin."
+            })
+
+        # Randomize all questions
+        random.shuffle(question_ids)
+
+        # USE EXACTLY 10 QUESTIONS
+        request.session["questions"] = question_ids[:10]
         request.session["qno"] = 0
         request.session["score"] = 0
 
-    question_ids = request.session["questions"]
-    qno = request.session["qno"]
+        request.session.modified = True
 
-    # Finish quiz
+    # ----------------------------------------------
+    # GET QUIZ SESSION
+    # ----------------------------------------------
+
+    question_ids = request.session.get("questions", [])
+    qno = request.session.get("qno", 0)
+    score = request.session.get("score", 0)
+
+    # Safety check
+    if not question_ids:
+        request.session.pop("questions", None)
+        request.session.pop("qno", None)
+        request.session.pop("score", None)
+
+        return redirect("quiz")
+
+    # ----------------------------------------------
+    # QUIZ FINISHED
+    # ----------------------------------------------
+
     if qno >= len(question_ids):
 
-        score = request.session["score"]
+        total = len(question_ids)
 
-        if request.user.is_authenticated:
-            Result.objects.create(
-                user=request.user,
-                score=score,
-                total=len(question_ids)
-            )
+        Result.objects.create(
+            user=request.user,
+            score=score,
+            total=total
+        )
 
+        # Clear quiz session
         request.session.pop("questions", None)
         request.session.pop("qno", None)
         request.session.pop("score", None)
 
         return render(request, "result.html", {
             "score": score,
-            "total": len(question_ids)
+            "total": total
         })
 
+    # ----------------------------------------------
+    # GET CURRENT QUESTION
+    # ----------------------------------------------
+
     try:
-        question = Question.objects.get(id=question_ids[qno])
+        question = Question.objects.get(
+            id=question_ids[qno]
+        )
+
     except Question.DoesNotExist:
 
+        # Remove invalid quiz session
         request.session.pop("questions", None)
         request.session.pop("qno", None)
         request.session.pop("score", None)
 
         return redirect("quiz")
 
+    # ----------------------------------------------
+    # SUBMIT ANSWER
+    # ----------------------------------------------
+
     if request.method == "POST":
 
-        selected = request.POST.get("answer")
+        selected_answer = request.POST.get("answer")
 
-        if selected == question.answer:
-            request.session["score"] += 1
+        # Check answer
+        if selected_answer == question.answer:
+            request.session["score"] = score + 1
 
-        request.session["qno"] += 1
+        # Move to next question
+        request.session["qno"] = qno + 1
+
+        request.session.modified = True
 
         return redirect("quiz")
+
+    # ----------------------------------------------
+    # DISPLAY QUESTION
+    # ----------------------------------------------
 
     return render(request, "quiz.html", {
         "question": question,
         "current": qno + 1,
-        "total": len(question_ids)
+        "total": len(question_ids),
     })
 
 
-# ---------------- REGISTER ----------------
+# ==================================================
+# REGISTER
+# ==================================================
 
 def register(request):
 
@@ -95,11 +148,15 @@ def register(request):
         form = RegisterForm(request.POST)
 
         if form.is_valid():
+
             user = form.save()
+
             login(request, user)
+
             return redirect("/")
 
     else:
+
         form = RegisterForm()
 
     return render(request, "register.html", {
@@ -107,14 +164,16 @@ def register(request):
     })
 
 
-# ---------------- LOGIN ----------------
+# ==================================================
+# LOGIN
+# ==================================================
 
 def login_user(request):
 
     if request.method == "POST":
 
-        username = request.POST.get("username")
-        password = request.POST.get("password")
+        username = request.POST.get("username", "").strip()
+        password = request.POST.get("password", "")
 
         user = authenticate(
             request,
@@ -123,40 +182,56 @@ def login_user(request):
         )
 
         if user is not None:
+
             login(request, user)
+
             return redirect("/")
 
         return render(request, "login.html", {
-            "error": "Invalid Username or Password"
+            "error": "Invalid username or password.",
+            "username": username
         })
 
     return render(request, "login.html")
 
 
-# ---------------- LOGOUT ----------------
+# ==================================================
+# LOGOUT
+# ==================================================
 
 def logout_user(request):
+
     logout(request)
+
     return redirect("/")
 
 
-# ---------------- DASHBOARD ----------------
+# ==================================================
+# DASHBOARD
+# ==================================================
 
 @login_required
 def dashboard(request):
 
-    results = Result.objects.filter(user=request.user).order_by("-date")
+    results = Result.objects.filter(
+        user=request.user
+    ).order_by("-date")
 
     return render(request, "dashboard.html", {
         "results": results
     })
 
 
-# ---------------- LEADERBOARD ----------------
+# ==================================================
+# LEADERBOARD
+# ==================================================
 
 def leaderboard(request):
 
-    results = Result.objects.order_by("-score", "date")[:10]
+    results = Result.objects.order_by(
+        "-score",
+        "date"
+    )[:10]
 
     return render(request, "leaderboard.html", {
         "results": results

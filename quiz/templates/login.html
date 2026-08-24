@@ -9,6 +9,11 @@
     <p style="color:#cbd5e1;margin-bottom:35px;">
         Login to continue your quiz journey.
     </p>
+    {% if error %}
+    <p style="color:#ef4444;font-weight:600;margin-bottom:20px;">
+        {{ error }}
+    </p>
+{% endif %}
 
     <form method="POST">
 
