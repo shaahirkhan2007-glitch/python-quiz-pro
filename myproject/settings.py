@@ -1,37 +1,19 @@
 from pathlib import Path
 import os
 
-# --------------------------------------------------
-# BASE DIRECTORY
-# --------------------------------------------------
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# --------------------------------------------------
 # SECURITY
-# --------------------------------------------------
-
 SECRET_KEY = os.environ.get(
     "SECRET_KEY",
     "django-insecure-python-quiz-project-key"
 )
 
-DEBUG = os.environ.get("DEBUG", "False") == "True"
+DEBUG = os.environ.get("DEBUG", "True") == "True"
 
-# ALLOWED_HOSTS =[] 
-ALLOWED_HOSTS = [
-    ".onrender.com",
-    "localhost",
-    "127.0.0.1"
-]
+ALLOWED_HOSTS = ["*"]
 
-
-
-# --------------------------------------------------
 # APPLICATIONS
-# --------------------------------------------------
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -43,14 +25,9 @@ INSTALLED_APPS = [
     "quiz",
 ]
 
-
-# --------------------------------------------------
 # MIDDLEWARE
-# --------------------------------------------------
-
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -61,24 +38,15 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-
-# --------------------------------------------------
-# URL CONFIGURATION
-# --------------------------------------------------
-
 ROOT_URLCONF = "myproject.urls"
 
-
-# --------------------------------------------------
 # TEMPLATES
-# --------------------------------------------------
-
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
 
         "DIRS": [
-            BASE_DIR / "myapp" / "templates",
+            BASE_DIR / "quiz" / "templates",
         ],
 
         "APP_DIRS": True,
@@ -86,27 +54,16 @@ TEMPLATES = [
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.request",
-
                 "django.contrib.auth.context_processors.auth",
-
                 "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-
-# --------------------------------------------------
-# WSGI
-# --------------------------------------------------
-
 WSGI_APPLICATION = "myproject.wsgi.application"
 
-
-# --------------------------------------------------
 # DATABASE
-# --------------------------------------------------
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -114,11 +71,7 @@ DATABASES = {
     }
 }
 
-
-# --------------------------------------------------
-# PASSWORD VALIDATION
-# --------------------------------------------------
-
+# PASSWORDS
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -134,53 +87,29 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# --------------------------------------------------
-# LANGUAGE / TIME
-# --------------------------------------------------
-
+# INTERNATIONALIZATION
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "Asia/Kolkata"
 
 USE_I18N = True
-
 USE_TZ = True
 
-
-# --------------------------------------------------
 # STATIC FILES
-# --------------------------------------------------
-
 STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
-   BASE_DIR  / 'quiz' / 'static',
+    BASE_DIR / "quiz" / "static",
 ]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-ALLOWED_HOSTS = ["*"]
 
-# WhiteNoise compressed static files
 STATICFILES_STORAGE = (
     "whitenoise.storage.CompressedManifestStaticFilesStorage"
 )
 
-
-# --------------------------------------------------
-# DEFAULT PRIMARY KEY
-# --------------------------------------------------
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
-# --------------------------------------------------
 # LOGIN / LOGOUT
-# --------------------------------------------------
-
 LOGIN_URL = "/login/"
-
 LOGIN_REDIRECT_URL = "/"
-
 LOGOUT_REDIRECT_URL = "/"
