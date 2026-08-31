@@ -3,17 +3,21 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 # SECURITY
+
 SECRET_KEY = os.environ.get(
     "SECRET_KEY",
     "django-insecure-python-quiz-project-key"
 )
 
-DEBUG = os.environ.get("DEBUG", "True") == "True"
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = ["*"]
 
+
 # APPLICATIONS
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -25,9 +29,12 @@ INSTALLED_APPS = [
     "quiz",
 ]
 
+
 # MIDDLEWARE
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -38,9 +45,12 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+
 ROOT_URLCONF = "myproject.urls"
 
+
 # TEMPLATES
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -61,9 +71,12 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = "myproject.wsgi.application"
 
+
 # DATABASE
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -71,7 +84,9 @@ DATABASES = {
     }
 }
 
-# PASSWORDS
+
+# PASSWORD VALIDATION
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -87,14 +102,20 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 # INTERNATIONALIZATION
+
 LANGUAGE_CODE = "en-us"
+
 TIME_ZONE = "Asia/Kolkata"
 
 USE_I18N = True
+
 USE_TZ = True
 
+
 # STATIC FILES
+
 STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
@@ -107,9 +128,14 @@ STATICFILES_STORAGE = (
     "whitenoise.storage.CompressedManifestStaticFilesStorage"
 )
 
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+
 # LOGIN / LOGOUT
+
 LOGIN_URL = "/login/"
+
 LOGIN_REDIRECT_URL = "/"
+
 LOGOUT_REDIRECT_URL = "/"

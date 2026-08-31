@@ -17,10 +17,12 @@ class Question(models.Model):
 
 
 class Result(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
 
     score = models.IntegerField()
-
     total = models.IntegerField()
 
     date = models.DateTimeField(auto_now_add=True)
