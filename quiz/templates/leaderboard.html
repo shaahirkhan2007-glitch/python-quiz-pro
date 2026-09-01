@@ -1,61 +1,55 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
 
-<div class="card">
+<h1>🏆 Leaderboard</h1>
 
-    <h1>🏆 Leaderboard</h1>
 
-    <table class="leaderboard-table">
+<table>
 
-        <tr>
-            <th>Rank</th>
-            <th>Username</th>
-            <th>Score</th>
-            <th>Total</th>
-            <th>Percentage</th>
-        </tr>
+    <tr>
 
-        {% for result in results %}
+        <th>Rank</th>
 
-        <tr>
+        <th>User</th>
 
-            <td>
-                {% if forloop.counter == 1 %}
-                    🥇
-                {% elif forloop.counter == 2 %}
-                    🥈
-                {% elif forloop.counter == 3 %}
-                    🥉
-                {% else %}
-                    {{ forloop.counter }}
-                {% endif %}
-            </td>
+        <th>Score</th>
 
-            <td>{{ result.user.username }}</td>
+    </tr>
 
-            <td>{{ result.score }}</td>
 
-            <td>{{ result.total }}</td>
+    {% for result in results %}
 
-            <td>
-                {% widthratio result.score result.total 100 %}%
-            </td>
+    <tr>
 
-        </tr>
+        <td>
+            {{ forloop.counter }}
+        </td>
 
-        {% empty %}
+        <td>
+            {{ result.user.username }}
+        </td>
 
-        <tr>
-            <td colspan="5">
-                No Results Available
-            </td>
-        </tr>
+        <td>
+            {{ result.score }}/{{ result.total }}
+        </td>
 
-        {% endfor %}
+    </tr>
 
-    </table>
+    {% empty %}
 
-</div>
+    <tr>
+
+        <td colspan="3">
+
+            No results yet.
+
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
 
 {% endblock %}

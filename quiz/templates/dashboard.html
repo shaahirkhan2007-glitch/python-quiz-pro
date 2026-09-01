@@ -1,80 +1,52 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
 
-<h1 style="text-align:center;margin-bottom:40px;">
-📊 Dashboard
-</h1>
+<h1>Your Dashboard</h1>
 
-<div class="dashboard-grid">
+{% if results %}
 
-    <div class="dashboard-card">
-        <h2>📝 Total Attempts</h2>
-        <h1>{{ results|length }}</h1>
-    </div>
+<table>
 
-    <div class="dashboard-card">
-        <h2>🏆 Highest Score</h2>
-        <h1>
-            {% if results %}
-                {{ results.0.score }}
-            {% else %}
-                0
-            {% endif %}
-        </h1>
-    </div>
+    <tr>
 
-    <div class="dashboard-card">
-        <h2>👤 Welcome</h2>
-        <h1>{{ request.user.username }}</h1>
-    </div>
+        <th>Score</th>
 
-</div>
+        <th>Total</th>
 
-<div class="card" style="margin-top:40px;">
+        <th>Date</th>
 
-<h2 style="margin-bottom:20px;">
-Recent Quiz Results
-</h2>
+    </tr>
 
-<table class="result-table">
 
-<tr>
+    {% for result in results %}
 
-<th>#</th>
-<th>Score</th>
-<th>Total</th>
+    <tr>
 
-</tr>
+        <td>
+            {{ result.score }}
+        </td>
 
-{% for result in results %}
+        <td>
+            {{ result.total }}
+        </td>
 
-<tr>
+        <td>
+            {{ result.date }}
+        </td>
 
-<td>{{ forloop.counter }}</td>
+    </tr>
 
-<td>{{ result.score }}</td>
-
-<td>{{ result.total }}</td>
-
-</tr>
-
-{% empty %}
-
-<tr>
-
-<td colspan="3">
-
-No quiz attempts yet.
-
-</td>
-
-</tr>
-
-{% endfor %}
+    {% endfor %}
 
 </table>
 
-</div>
+{% else %}
+
+<p>
+    You have not completed any quiz yet.
+</p>
+
+{% endif %}
 
 {% endblock %}
