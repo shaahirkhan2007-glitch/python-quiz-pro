@@ -1,43 +1,55 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
 
-<div class="form-container">
+<div class="card" style="max-width:500px;margin:60px auto;text-align:center;">
 
-    <h1>Login</h1>
+    <h1 style="font-size:42px;">Welcome Back 👋</h1>
 
+    <p style="color:#cbd5e1;margin-bottom:35px;">
+        Login to continue your quiz journey.
+    </p>
+    {% if error %}
+    <p style="color:#ef4444;font-weight:600;margin-bottom:20px;">
+        {{ error }}
+    </p>
+{% endif %}
 
     <form method="POST">
 
         {% csrf_token %}
 
-
         <input
             type="text"
             name="username"
-            placeholder="Username"
-            required
-        >
+            placeholder="👤 Username"
+            required>
 
+        <br><br>
 
         <input
             type="password"
             name="password"
-            placeholder="Password"
-            required
-        >
+            placeholder="🔒 Password"
+            required>
 
+        <br><br>
 
-        <button
-            type="submit"
-            class="btn"
-        >
-
+        <button type="submit">
             Login
-
         </button>
 
     </form>
+
+    <br>
+
+    <p style="color:#94a3b8;">
+        Don't have an account?
+    </p>
+
+    <a href="/register/" class="btn">
+        Create Account
+    </a>
 
 </div>
 

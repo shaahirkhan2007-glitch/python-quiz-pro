@@ -1,108 +1,116 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
 
-<div class="quiz-container">
+<div class="card quiz-card">
 
-    <h1>🧠 Python Quiz</h1>
+    <div class="quiz-header">
+        <h2>🧠 Python Quiz</h2>
 
-    {% if questions %}
-
-    <form method="POST">
-
-        {% csrf_token %}
-
-        {% for question in questions %}
-
-        <div class="question-card">
-
-            <h3>
-                {{ forloop.counter }}. {{ question.question }}
-            </h3>
-
-
-            <label>
-
-                <input
-                    type="radio"
-                    name="question_{{ question.id }}"
-                    value="{{ question.option1 }}"
-                    required
-                >
-
-                {{ question.option1 }}
-
-            </label>
-
-
-            <label>
-
-                <input
-                    type="radio"
-                    name="question_{{ question.id }}"
-                    value="{{ question.option2 }}"
-                >
-
-                {{ question.option2 }}
-
-            </label>
-
-
-            <label>
-
-                <input
-                    type="radio"
-                    name="question_{{ question.id }}"
-                    value="{{ question.option3 }}"
-                >
-
-                {{ question.option3 }}
-
-            </label>
-
-
-            <label>
-
-                <input
-                    type="radio"
-                    name="question_{{ question.id }}"
-                    value="{{ question.option4 }}"
-                >
-
-                {{ question.option4 }}
-
-            </label>
-
+        <div class="timer">
+            ⏰ <span id="time">30</span>s
         </div>
-
-        {% endfor %}
-
-
-        <button
-            type="submit"
-            class="btn"
-        >
-
-            Submit Quiz
-
-        </button>
-
-    </form>
-
-    {% else %}
-
-    <div class="empty-message">
-
-        <h2>No questions available.</h2>
-
-        <p>
-            Please add questions from the Django admin panel.
-        </p>
-
     </div>
 
+    {% if current and total %}
+    <div class="progress-box">
+        <div class="progress-bar">
+            <div class="progress-fill"style="width:{% widthratio current total 100 %}%;">
+            </div>
+        </div>
+
+        <p class="question-count">
+            Question {{ current }} of {{ total }}
+        </p>
+    </div>
     {% endif %}
 
+    <form id="quizForm" method="POST">
+        {% csrf_token %}
+
+        <div class="question-box">
+            <h3>{{ question.question }}</h3>
+        </div>
+
+        <div class="option">
+            <label>
+                <input type="radio" name="answer"
+                       value="{{ question.option1 }}" required>
+                <span>{{ question.option1 }}</span>
+            </label>
+        </div>
+
+        <div class="option">
+            <label>
+                <input type="radio" name="answer"
+                       value="{{ question.option2 }}">
+                <span>{{ question.option2 }}</span>
+            </label>
+        </div>
+
+        <div class="option">
+            <label>
+                <input type="radio" name="answer"
+                       value="{{ question.option3 }}">
+                <span>{{ question.option3 }}</span>
+            </label>
+        </div>
+
+        <div class="option">
+            <label>
+                <input type="radio" name="answer"
+                       value="{{ question.option4 }}">
+                <span>{{ question.option4 }}</span>
+            </label>
+        </div>
+
+       <button type="submit" class="btn" id="submitBtn">
+    Submit Answer
+</button>
+
+<div id="answerBox" style="display:none;margin-top:20px;text-align:center;font-size:22px;font-weight:bold;">
 </div>
+    </form>
+
+</div>
+
+<script>
+const form = document.getElementById("quizForm");
+
+form.addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    const selected = document.querySelector("input[name='answer']:checked");
+
+    if(!selected){
+        alert("Please select an option.");
+        return;
+    }
+
+    document.getElementById("answerBox").style.display = "block";
+    document.getElementById("answerBox").innerHTML = "Checking Answer...";
+
+    setTimeout(function(){
+        form.submit();
+    },1500);
+
+});
+
+let time = 30;
+const timer = document.getElementById("time");
+
+setInterval(function(){
+
+    time--;
+
+    timer.innerHTML = time;
+
+    if(time<=0){
+        form.submit();
+    }
+
+},1000);
+</script>
 
 {% endblock %}

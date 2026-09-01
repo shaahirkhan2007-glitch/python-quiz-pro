@@ -1,41 +1,69 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
 
-<div class="hero">
+<div class="card" style="text-align:center;">
 
-    <h1>
-        🧠 Test Your Python Knowledge
-    </h1>
+    <h1>🚀 Python Quiz Pro</h1>
 
-    <p>
-        Answer Python questions and improve your skills.
+    <p style="font-size:22px;margin:20px 0;color:#cbd5e1;">
+        Test your Python knowledge with interactive quizzes,
+        instant scoring, leaderboard rankings, and a modern learning experience.
     </p>
 
+    <div style="margin-top:40px;display:flex;justify-content:center;gap:20px;flex-wrap:wrap;">
 
-    {% if user.is_authenticated %}
+        <a href="/quiz/" class="btn">
+            🎯 Start Quiz
+        </a>
 
-    <a
-        href="{% url 'quiz' %}"
-        class="btn"
-    >
+        <a href="/leaderboard/" class="btn">
+            🏆 Leaderboard
+        </a>
 
-        Start Quiz
+        <a href="/dashboard/" class="btn">
+            📊 Dashboard
+        </a>
 
-    </a>
+    </div>
 
-    {% else %}
+</div>
 
-    <a
-        href="{% url 'login' %}"
-        class="btn"
-    >
+<br><br>
 
-        Login to Start
+<div style="display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;">
 
-    </a>
+    <div class="card">
 
-    {% endif %}
+        <h2>⚡ Fast Quiz</h2>
+
+        <p>
+            Answer randomly selected questions with an elegant interface.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <h2>🏆 Rankings</h2>
+
+        <p>
+            Compare your score with other users on the leaderboard.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <h2>📈 Progress</h2>
+
+        <p>
+            View your previous quiz attempts and improve your performance.
+        </p>
+
+    </div>
 
 </div>
 
